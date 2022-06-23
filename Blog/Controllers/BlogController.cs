@@ -11,13 +11,13 @@ namespace Blog.Controllers
 
         public IActionResult Index()
         {
-            return View("Index",Posts);
+            return View("Index", Posts);
         }
 
 
         public IActionResult CreatorPage(Guid id)
         {
-           if(id != Guid.Empty)
+            if (id != Guid.Empty)
             {
                 BlogEntry existingEntry = Posts.FirstOrDefault(x => x.Id == id);
                 return View(model: existingEntry);
@@ -26,17 +26,29 @@ namespace Blog.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreatorPage(string content)
+        public IActionResult CreatorPage(BlogEntry entry)
         {
-            BlogEntry entry = new BlogEntry();
-            entry.Content = content;
-            entry.Id = Guid.NewGuid();
-            Posts.Add(entry);
+            if (entry.Id == Guid.Empty)
+            {
+                BlogEntry newEntry = new BlogEntry();
+                newEntry.Content = entry.Content;
+                newEntry.Id = Guid.NewGuid();
+                Posts.Add(newEntry);
+            }
+            else
+            {
+                BlogEntry existingEntry = Posts.FirstOrDefault(x => x.Id == entry.Id);
+                existingEntry.Content = entry.Content;
+            }
+
+
+
+
             return RedirectToAction("Index"); // 
-        } 
+        }
 
 
 
-   
+
     }
 }
