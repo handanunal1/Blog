@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Blog.Models;
+using System.Linq;
 namespace Blog.Controllers
 {
     public class BlogController : Controller
     {
 
-        static List<string> Posts = new List<string>();
+        static List<BlogEntry> Posts = new List<BlogEntry>();
 
 
         public IActionResult Index()
@@ -14,18 +15,28 @@ namespace Blog.Controllers
         }
 
 
-        public IActionResult CreatorPage()
+        public IActionResult CreatorPage(Guid id)
         {
-          
+           if(id != Guid.Empty)
+            {
+                BlogEntry existingEntry = Posts.FirstOrDefault(x => x.Id == id);
+                return View(model: existingEntry);
+            }
             return View();
         }
 
         [HttpPost]
         public IActionResult CreatorPage(string content)
         {
-            Posts.Add(content);
+            BlogEntry entry = new BlogEntry();
+            entry.Content = content;
+            entry.Id = Guid.NewGuid();
+            Posts.Add(entry);
             return RedirectToAction("Index"); // 
         } 
 
+
+
+   
     }
 }
