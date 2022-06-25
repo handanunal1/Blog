@@ -12,7 +12,7 @@
 <h5 class="mb-4">Create post</h5>
 <div >
     <form action="CreatorPage" method="POST">
-        <input asp-for=Id />
+        <input hidden asp-for=Id />
         <textarea asp-for=Content  id="myEditor"></textarea>
         <button type="submit" class="btn btn-secondary mt-4">Submit</button>
     </form>
